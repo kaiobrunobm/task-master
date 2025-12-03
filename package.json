@@ -1,18 +1,18 @@
 {
   "name": "task-master",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Nodejs cli todolist",
   "main": "index.js",
   "scripts": {
-    "todo": "node index.js"
+    "todo": "node --env-file=.env index.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kaiobrunobm/task-master.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Kaio Bruno <bmkaiobruno@gmail.com",
+  "license": "MIT",
   "type": "module",
   "bugs": {
     "url": "https://github.com/kaiobrunobm/task-master/issues"
