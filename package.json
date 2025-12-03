@@ -1,0 +1,21 @@
+{
+  "name": "task-master",
+  "version": "1.0.0",
+  "description": "Nodejs cli todolist",
+  "main": "index.js",
+  "scripts": {
+    "todo": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaiobrunobm/task-master.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/kaiobrunobm/task-master/issues"
+  },
+  "homepage": "https://github.com/kaiobrunobm/task-master#readme"
+}
