@@ -1,77 +1,43 @@
-import { randomUUID } from 'node:crypto'
-import { loadTasks, saveTask } from './helper-function.js'
-const cliComand = process.argv.slice(2)
+import express from 'express'
+import { prisma } from './lib/prisma.js';
 
-if (cliComand.length > 2) {
-  throw new SyntaxError('Task master only accepts two command: "action" and "task/id"')
-}
+const port = process.env.SERVER_PORT || 3000;
+const app = express();
 
-switch (cliComand[0]) {
-  case 'add':
-    let tasks = [];
+app.use(express.json());
 
-    tasks = loadTasks();
+app.get('/', (req, res) => {
+  res.send('<h1>Todo list</h1>');
+});
 
-    const newDataTodo = {
-      id: randomUUID(),
-      title: cliComand[1],
-      completed: false,
-      createdAt: new Date()
+app.get('/tasks', async (req, res) => {
+  try {
+    const allTasks = await prisma.todo.findMany();
+    res.json(allTasks);
+  } catch (error) {
+    res.status(500).json({ error: error.message || 'Internal Server Error' });
+  }
+});
+
+app.post('/tasks', async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    if (!title) {
+      return res.status(400).json({ error: 'Title is required' });
     }
-
-    tasks.push(newDataTodo)
-
-    saveTask(tasks)
-
-    console.log("Todo added")
-    break;
-  case 'remove':
-
-    let tasksToRemove = [];
-
-    tasksToRemove = loadTasks();
-
-    const updatedTaskRemoved = tasksToRemove.filter(task => task.id !== cliComand[1])
-    saveTask(updatedTaskRemoved)
-
-    console.log("Todo removed")
-
-    break;
-  case 'complete':
-
-    let tasksToUpdate = [];
-    tasksToUpdate = loadTasks();
-
-    const updatedTask = tasksToUpdate.map(task => {
-      if (task.id === cliComand[1]) {
-        return {
-          ...task,
-          completed: true
-        }
-      } else {
-        return task
+    const newTask = await prisma.todo.create({
+      data: {
+        title,
+        description
       }
-    })
+    });
+    res.status(201).json(newTask);
+  } catch (error) {
+    res.status(500).json({ error: error.message || 'Internal Server Error' });
+  }
+});
 
-    saveTask(updatedTask)
-    console.log("Todo completed")
 
-    break;
-  case 'list':
-    const tasksList = loadTasks();
-    
-    if (tasksList.length <= 0) {
-      throw new Error('No tasks found')
-    }
-
-    tasksList.forEach(task => {
-      console.log(`[${task.completed ? 'X' : ' '}] ${task.title} [id:${task.id}]`)
-    })
-    break;
-  case undefined: 
-    console.log('No command provided')
-    break;
-  default:
-    console.log('Unknown command')
-    break;
-}
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});

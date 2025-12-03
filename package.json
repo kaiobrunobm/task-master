@@ -4,7 +4,7 @@
   "description": "Nodejs cli todolist",
   "main": "index.js",
   "scripts": {
-    "todo": "node --env-file=.env index.js"
+    "start": "node --env-file=.env index.js"
   },
   "repository": {
     "type": "git",
@@ -25,5 +25,13 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.1.0",
+    "@prisma/client": "^7.1.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "pg": "^8.16.3",
+    "prisma": "^7.1.0"
   }
 }
